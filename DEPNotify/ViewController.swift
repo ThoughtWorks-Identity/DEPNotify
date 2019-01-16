@@ -61,7 +61,8 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
     var fileVaultAlertIcon = NSImage(named: NSImage.Name(rawValue: "FileVault"))
     
     // Preparing the web view
-    let wkWebView = WKWebView(frame: CGRect(x: 0, y: 122, width: 700, height: 328))
+    //let wkWebView = WKWebView(frame: CGRect(x: 0, y: 122, width: 700, height: 328))
+    let wkWebView = WKWebView(frame: CGRect(x: 0, y: 0, width: 700, height: 505))
     var myRequest = ""
     
     // Preparing the video view
