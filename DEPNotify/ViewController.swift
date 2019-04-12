@@ -375,10 +375,21 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         case "KillCommandFile:" :
             killCommandFile = true
             
-        case "Logout:":
-            alertMessage = command //.replacingOccurrences(of: "Logout: ", with: "")
-            contentToPass = alertMessage
-            self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
+        //case "Logout:":
+        //    alertMessage = command //.replacingOccurrences(of: "Logout: ", with: "")
+        //    contentToPass = alertMessage
+        //    self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
+            
+        case "Logout:" :
+            let alertController = NSAlert()
+            alertController.messageText = command.replacingOccurrences(of: "Logout: ", with: "")
+            alertController.addButton(withTitle: "Logout")
+            //alertController.addButton(withTitle: "Quit")
+            alertController.beginSheetModal(for: NSApp.windows[0]) { response in
+                self.quitSession()
+                NSApp.terminate(self)
+            }
+
             
         case "LogoutNow:":
             self.quitSession()
