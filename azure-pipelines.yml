@@ -1,0 +1,31 @@
+resources:
+- repo: self
+queue:
+  name: Hosted macOS
+  demands:
+  - xcode
+  - sh
+
+steps:
+  - task: InstallAppleCertificate@2
+    displayName: 'Install an Apple certificate'
+    inputs:
+      certSecureFile: '70421d8e-ba21-4130-a96b-85f5ed11c188'
+      certPwd: '$(P12password)'
+
+  - task: Xcode@5
+    inputs:
+      xcodeVersion: '10'
+      actions: 'build'
+      xcWorkspacePath: 'DEPNotify/DEPNotify.xcodeproj'
+      sdk: 'macosx10.14'
+      Arguments: '-target DEPNotify'
+
+    displayName: 'Build DEP Notify'
+
+  - task: PublishPipelineArtifact@0
+    displayName: 'Publish DEP Notify package'
+    inputs:
+      artifactName: DEPNotifyPackage
+      targetPath: '$(Agent.BuildDirectory)/s/DEPNotify/build/Release/DEPNotify.app'
+
