@@ -23,15 +23,8 @@ steps:
       args: '-target DEPNotify'
    
 
-  - task: CopyFiles@2
-    displayName: 'Copy built app to staging directory'
-    inputs:
-      contents: '**/DEPNotify.app'
-      targetFolder: '$(build.artifactStagingDirectory)'
-
   - task: PublishPipelineArtifact@0
-    displayName: 'Publish DEP Notify package'
     inputs:
-      artifactName: DEPNotifyPackage
-      targetPath: '$(build.artifactStagingDirectory)/DEPNotify.app'
+      artifactName: 'DEPNotifyApp'
+      targetPath: 'build/Release/DEPNotify.app'
 
