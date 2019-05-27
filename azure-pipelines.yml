@@ -14,14 +14,14 @@ steps:
       certPwd: '$(mac_distribution_signing_password)'
 
   - task: Xcode@5
+    displayName: 'Build DEP Notify'
     inputs:
       xcodeVersion: '10'
       actions: 'build'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       sdk: 'macosx10.14'
-      Arguments: '-target DEPNotify'
-
-    displayName: 'Build DEP Notify'
+      args: '-target DEPNotify'
+   
 
   - task: CopyFiles@2
     displayName: 'Copy built app to staging directory'
