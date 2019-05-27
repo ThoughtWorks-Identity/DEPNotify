@@ -1,10 +1,10 @@
 resources:
-- repo: self
+  - repo: self
 queue:
   name: Hosted macOS
   demands:
-  - xcode
-  - sh
+    - xcode
+    - sh
 
 steps:
   - task: InstallAppleCertificate@2
@@ -17,15 +17,21 @@ steps:
     inputs:
       xcodeVersion: '10'
       actions: 'build'
-      xcWorkspacePath: 'DEPNotify/DEPNotify.xcodeproj'
+      xcWorkspacePath: 'DEPNotify.xcodeproj'
       sdk: 'macosx10.14'
       Arguments: '-target DEPNotify'
 
     displayName: 'Build DEP Notify'
 
+  - task: CopyFiles@2
+    displayName: 'Copy built app to staging directory'
+    inputs:
+      contents: '**/DEPNotify.app'
+      targetFolder: '$(build.artifactStagingDirectory)'
+
   - task: PublishPipelineArtifact@0
     displayName: 'Publish DEP Notify package'
     inputs:
       artifactName: DEPNotifyPackage
-      targetPath: '$(Agent.BuildDirectory)/s/DEPNotify/build/Release/DEPNotify.app'
+      targetPath: '$(build.artifactStagingDirectory)/DEPNotify.app'
 
