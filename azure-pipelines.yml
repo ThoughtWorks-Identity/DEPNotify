@@ -25,6 +25,6 @@ steps:
 
   - task: PublishPipelineArtifact@0
     inputs:
-      artifactName: 'DEPNotifyApp'
+      artifactName: 'DEPNotify.app'
       targetPath: 'build/Release/DEPNotify.app'
 
