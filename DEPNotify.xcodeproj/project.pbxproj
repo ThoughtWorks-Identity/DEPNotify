@@ -239,7 +239,7 @@
 				TargetAttributes = {
 					1A60598A1E55D6E90085B55F = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = VRPY9KHGX6;
+						DevelopmentTeam = 3S3EPAT94J;
 						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
@@ -262,6 +262,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				"es-419",
@@ -482,7 +483,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = VRPY9KHGX6;
+				DEVELOPMENT_TEAM = 3S3EPAT94J;
 				INFOPLIST_FILE = DEPNotify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -501,7 +502,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = VRPY9KHGX6;
+				DEVELOPMENT_TEAM = 3S3EPAT94J;
 				INFOPLIST_FILE = DEPNotify/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;

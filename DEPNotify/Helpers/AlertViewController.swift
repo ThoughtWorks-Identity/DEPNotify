@@ -32,6 +32,11 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
         alertMessage = messagePass.replacingOccurrences(of: "Logout: ", with: "")
         alertType = "Logout"
         quitButton.title = "Logout"
+    case "Restart:" :
+        alertMessage = messagePass.replacingOccurrences(of: "Reboot: ", with: "")
+        alertType = "Reboot"
+        quitButton.title = "Reboot"
+        
     default: break
     }
     
@@ -43,12 +48,50 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
 
     @IBAction func quitButton(_ sender: Any) {
         if alertType == "Quit" {
-        self.view.window?.close()
-        NSApp.terminate(self)
+            self.view.window?.close()
+            NSApp.terminate(self)
         } else if alertType == "Logout" {
             self.quitSession()
             exit(0)
+        } else if alertType == "Reboot" {
+            self.reboot()
+            exit(0)
         }
+    }
+    
+    
+    func reboot() {
+        var targetDesc: AEAddressDesc = AEAddressDesc.init()
+        var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
+        var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
+        var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
+        
+        _ = AECreateDesc(
+            UInt32(typeProcessSerialNumber),
+            &psn,
+            MemoryLayout<ProcessSerialNumber>.size,
+            &targetDesc
+        )
+        
+        _ = AECreateAppleEvent(
+            UInt32(kCoreEventClass),
+            kAERestart,
+            &targetDesc,
+            AEReturnID(kAutoGenerateReturnID),
+            AETransactionID(kAnyTransactionID),
+            &eventToSend
+        )
+        
+        AEDisposeDesc(&targetDesc)
+        
+        _ = AESendMessage(
+            &eventToSend,
+            &eventReply,
+            AESendMode(kAENormalPriority),
+            kAEDefaultTimeout
+        )
+        
+     
     }
  
     
