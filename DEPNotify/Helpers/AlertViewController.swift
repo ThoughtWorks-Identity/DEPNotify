@@ -47,7 +47,7 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
         NSApp.terminate(self)
         } else if alertType == "Logout" {
             self.quitSession()
-            NSApp.terminate(self)
+            exit(0)
         }
     }
  
