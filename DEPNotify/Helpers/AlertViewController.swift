@@ -33,7 +33,7 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
         alertType = "Logout"
         quitButton.title = "Logout"
     case "Restart:" :
-        alertMessage = messagePass.replacingOccurrences(of: "Reboot: ", with: "")
+        alertMessage = messagePass.replacingOccurrences(of: "Restart: ", with: "")
         alertType = "Reboot"
         quitButton.title = "Reboot"
         
