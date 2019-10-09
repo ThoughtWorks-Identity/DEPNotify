@@ -10,7 +10,7 @@ import Foundation
 import Cocoa
 
 class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationDelegate {
-    
+
     @IBOutlet weak var quitButton: NSButton!
     @IBOutlet weak var alertMessageBox: NSTextField!
 
@@ -18,11 +18,11 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
     var messagePass = String()
     var alertType: String = ""
     var alertMessage: String = ""
-    
+
    override func viewDidLoad() {
 
     alertType = messagePass.components(separatedBy: " ").first!
-    
+
     switch alertType {
     case "Quit:" :
         alertMessage = messagePass.replacingOccurrences(of: "Quit: ", with: "")
@@ -36,14 +36,13 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
         alertMessage = messagePass.replacingOccurrences(of: "Restart: ", with: "")
         alertType = "Reboot"
         quitButton.title = "Reboot"
-        
     default: break
     }
-    
+
     // Set dialog box text content based on user input from Command: Quit:
     alertMessageBox.stringValue = alertMessage
-    
-    
+
+
     }
 
     @IBAction func quitButton(_ sender: Any) {
@@ -53,61 +52,59 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
         } else if alertType == "Logout" {
             self.quitSession()
             exit(0)
-        } else if alertType == "Reboot" {
-            self.reboot()
-            exit(0)
+        }else if alertType == "Reboot" {
+        self.reboot()
+        exit(0)
         }
     }
-    
-    
+
     func reboot() {
-        var targetDesc: AEAddressDesc = AEAddressDesc.init()
-        var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
-        var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
-        var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
-        
-        _ = AECreateDesc(
-            UInt32(typeProcessSerialNumber),
-            &psn,
-            MemoryLayout<ProcessSerialNumber>.size,
-            &targetDesc
-        )
-        
-        _ = AECreateAppleEvent(
-            UInt32(kCoreEventClass),
-            kAERestart,
-            &targetDesc,
-            AEReturnID(kAutoGenerateReturnID),
-            AETransactionID(kAnyTransactionID),
-            &eventToSend
-        )
-        
-        AEDisposeDesc(&targetDesc)
-        
-        _ = AESendMessage(
-            &eventToSend,
-            &eventReply,
-            AESendMode(kAENormalPriority),
-            kAEDefaultTimeout
-        )
-        
-     
-    }
- 
-    
+           var targetDesc: AEAddressDesc = AEAddressDesc.init()
+           var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
+           var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
+           var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
+
+           _ = AECreateDesc(
+               UInt32(typeProcessSerialNumber),
+               &psn,
+               MemoryLayout<ProcessSerialNumber>.size,
+               &targetDesc
+           )
+
+           _ = AECreateAppleEvent(
+               UInt32(kCoreEventClass),
+               kAERestart,
+               &targetDesc,
+               AEReturnID(kAutoGenerateReturnID),
+               AETransactionID(kAnyTransactionID),
+               &eventToSend
+           )
+
+           AEDisposeDesc(&targetDesc)
+
+           _ = AESendMessage(
+               &eventToSend,
+               &eventReply,
+               AESendMode(kAENormalPriority),
+               kAEDefaultTimeout
+           )
+
+
+       }
+
     func quitSession() {
         var targetDesc: AEAddressDesc = AEAddressDesc.init()
         var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
         var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
         var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
-        
+
         _ = AECreateDesc(
             UInt32(typeProcessSerialNumber),
             &psn,
             MemoryLayout<ProcessSerialNumber>.size,
             &targetDesc
         )
-        
+
         _ = AECreateAppleEvent(
             UInt32(kCoreEventClass),
             kAEReallyLogOut,
@@ -116,16 +113,16 @@ class AlertViewController: NSViewController, NSTextFieldDelegate, NSApplicationD
             AETransactionID(kAnyTransactionID),
             &eventToSend
         )
-        
+
         AEDisposeDesc(&targetDesc)
-        
+
         _ = AESendMessage(
             &eventToSend,
             &eventReply,
             AESendMode(kAENormalPriority),
             kAEDefaultTimeout
         )
-        
+
     }
 
 

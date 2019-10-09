@@ -31,7 +31,7 @@ var alertMessage = ""
 var contentToPass = ""
 
 class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDelegate {
-    
+
 
     @IBOutlet weak var MainTitle: NSTextField!
     @IBOutlet weak var MainText: NSTextField!
@@ -44,84 +44,86 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
     @IBOutlet weak var continueButton: NSButton!
     @IBOutlet weak var logoView: NSImageView!
     @IBOutlet weak var ImageView: NSImageView!
-    
+
     var tracker = TrackProgress()
-    
+
     var helpURL = String()
-    
+
     var determinate = false
     var totalItems: Double = 0
     var currentItem = 0
-    
+
     var notify = false
-    
+
     var logo: NSImage?
     var maintextImage: NSImage?
     var notificationImage: NSImage?
-    var fileVaultAlertIcon = NSImage(named: NSImage.Name(rawValue: "FileVault"))
-    
+    var fileVaultAlertIcon = NSImage(named: "FileVault")
+
     // Preparing the web view
     //let wkWebView = WKWebView(frame: CGRect(x: 0, y: 122, width: 700, height: 328))
     let wkWebView = WKWebView(frame: CGRect(x: 0, y: 0, width: 700, height: 505))
     var myRequest = ""
-    
+
     // Preparing the video view
     let myVideoPlayerView = AVPlayerView(frame: CGRect(x: 0, y: 122, width: 700, height: 328)  )
-    
+
     // Video file URL
     var pathToVideo = "/var/tmp/sample.mp4"
-    
+
     @IBOutlet weak var test: NSImageView!
-    
+
     var activateEachStep = false
-    
+
     var killCommandFile = false
-    
+
     var quitKey = "x"
-    
+
     let myWorkQueue = DispatchQueue(label: "menu.nomad.DEPNotify.background_work_queue", attributes: [])
-    
+
     var pathToPlistDefault = "/Users/Shared/UserInput.plist"
     var plistPath = ""
-    
+
     // Variables to set Continue Button action
     var continueButtonTitle = "Continue" // Label of the continue button
 
     // Variablet to set Status Text alignment
     var defaultStatusTextAlignment = "center"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // notification listeners
         NotificationCenter.default.addObserver(self, selector: #selector(enableContinue), name: enableContinueButton, object: nil)
-        
+
         //var isOpaque = false
         ProgressBar.startAnimation(nil)
-        
+
         tracker.addObserver(self, forKeyPath: "statusText", options: .new, context: &statusContext)
         tracker.addObserver(self, forKeyPath: "command", options: .new, context: &commandContext)
         tracker.run()
-    
-        
+
+
         NSApp.activate(ignoringOtherApps: true)
-        
+
         NSApp.windows[0].makeKeyAndOrderFront(self)
-        
+
+        //NSApp.windows[0].mov
+
         NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.flagsChanged) {
             self.flagsChanged(with: $0)
             return $0
         }
-        
+
         NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.keyDown) {
             self.keyDown(with: $0)
             return $0
         }
-        
+
         // Initialize UserInput plist file
         iniPlistFile()
         continueButton.title = continueButtonTitle
-        
+
         // Set Status Text Alignment
         StatusText.alignment = .center
         if let statusTextAlignmentValue = UserDefaults.standard.string( forKey: "statusTextAlignment") {
@@ -135,8 +137,8 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
                 }
             }
         }
-        
-        
+
+
         // Check if Help Buble Title is present, otherwise hide help button
         if UserDefaults.standard.object(forKey: "helpBubble") != nil {
         print ("Help title found in preferences file. Loading it.")
@@ -145,15 +147,15 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             helpButton.isHidden = true
         }
     }
-    
+
     override func viewDidAppear() {
-        
+
         // Set Dark Mode safe Main Window background color to white
         self.view.window?.backgroundColor = NSColor.controlBackgroundColor
-        
+
         //Customize the window's title bar
         let window = self.view.window
-        
+
         if !CommandLine.arguments.contains("-oldskool") {
             window?.styleMask.insert(NSWindow.StyleMask.unifiedTitleAndToolbar)
             window?.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
@@ -163,19 +165,19 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             window?.titlebarAppearsTransparent = true
         }
     }
-    
+
     override var representedObject: Any? {
         didSet {
             // Update the view, if already loaded.
         }
     }
-    
+
     func updateStatus(status: String) {
-        
+
         self.StatusText.stringValue = status
         NSLog(self.StatusText.stringValue)
     }
-    
+
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &statusContext {
             if let newValue = change?[.newKey] {
@@ -205,14 +207,14 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
-            
+
         }
     }
-    
+
     func processCommand(command: String) {
-        
+
         switch command.components(separatedBy: " ").first! {
-        
+
         case "Video:" :
             let videoURL = command.replacingOccurrences(of: "Video: ", with: "")
             if (videoURL.hasPrefix("http")) { // If the URL provided is HTTP then stream
@@ -224,12 +226,12 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
                 // Loop Video
                 NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: myPlayer.currentItem, queue: nil)
                 { notification in
-                    let timer = CMTimeMake(5, 100);
+                    let timer = CMTimeMake(value: 5, timescale: 100);
                     myPlayer.seek(to: timer)
                     self.myVideoPlayerView.player?.play()
                 }
                 myVideoPlayerView.player?.play()
-                
+
             } else { // if the URL is local then load
                 self.view.addSubview(myVideoPlayerView)
                 let myURL = NSURL(fileURLWithPath: videoURL)
@@ -239,7 +241,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
                 // Loop Video
                 NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: myPlayer.currentItem, queue: nil)
                 { notification in
-                    let timer = CMTimeMake(5, 100);
+                    let timer = CMTimeMake(value: 5, timescale: 100);
                     myPlayer.seek(to: timer)
                     self.myVideoPlayerView.player?.play()
                 }
@@ -253,29 +255,29 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             //let myURL = URL(string: youtubeURL!)
             let myRequest = URLRequest(url: youtubeURL!)
             wkWebView.load(myRequest)
-            
+
         case "Website:" :
             let webSiteURL = command.replacingOccurrences(of: "Website: ", with: "")
             self.view.addSubview(wkWebView)
-            
+
             wkWebView.allowsBackForwardNavigationGestures = false
             let myURL = URL(string:webSiteURL)
             let myRequest = URLRequest(url: myURL!)
             wkWebView.load(myRequest)
-            
+
         case "FileVault:" :
             let alertController = NSAlert()
             alertController.icon = fileVaultAlertIcon
             alertController.messageText = command.replacingOccurrences(of: "FileVault: ", with: "")
             alertController.addButton(withTitle: "Ok")
             alertController.beginSheetModal(for: NSApp.windows[0])
-            
+
         case "Alert:" :
             let alertController = NSAlert()
             alertController.messageText = command.replacingOccurrences(of: "Alert: ", with: "")
             alertController.addButton(withTitle: "Ok")
             alertController.beginSheetModal(for: NSApp.windows[0])
-            
+
         // Puts a Button at the bottom of the window to Quit DEPNotify
         case "ContinueButton:" :
             let continueButtonTitle = command.replacingOccurrences(of: "ContinueButton: ", with: "")
@@ -283,7 +285,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             //continueButton.isHighlighted = true
             continueButton.isHidden = false
             buttonAction = "Continue"
-        
+
         // Puts a Button at the bottom of the window to display a Registration panel
         case "ContinueButtonRegister:" :
             let continueButtonTitle = command.replacingOccurrences(of: "ContinueButtonRegister: ", with: "")
@@ -291,7 +293,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             continueButton.isHidden = false
             //continueButton.isHighlighted = true
             buttonAction = "Register"
-            
+
         // Puts a Button at the bottom of the window to display an EULA panel
         case "ContinueButtonEULA:" :
             let continueButtonTitle = command.replacingOccurrences(of: "ContinueButtonEULA: ", with: "")
@@ -299,7 +301,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             continueButton.isHidden = false
             //continueButton.isHighlighted = true
             buttonAction  = "EULA"
-        
+
         // Puts a Button at the bottom of the window to restart the Mac
         case "ContinueButtonRestart:" :
             let continueButtonTitle = command.replacingOccurrences(of: "ContinueButtonRestart: ", with: "")
@@ -319,23 +321,23 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         case "Determinate:" :
             determinate = true
             ProgressBar.isIndeterminate = false
-            
+
             // default to 1 if we can't make a number
             totalItems = Double(command.replacingOccurrences(of: "Determinate: ", with: "")) ?? 1
             ProgressBar.maxValue = totalItems
             currentItem = 0
             ProgressBar.startAnimation(nil)
-            
+
         case "DeterminateManual:" :
             determinate = false
             ProgressBar.isIndeterminate = false
-            
+
             // default to 1 if we can't make a number
             totalItems = Double(command.replacingOccurrences(of: "DeterminateManual: ", with: "")) ?? 1
             ProgressBar.maxValue = totalItems
             currentItem = 0
             ProgressBar.startAnimation(nil)
-            
+
         case "DeterminateManualStep:" :
             // default to 1 if we can't make a number
             let stepMove = Int(Double(command.replacingOccurrences(of: "DeterminateManualStep: ", with: "")) ?? 1 )
@@ -345,55 +347,44 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
                 NSApp.activate(ignoringOtherApps: true)
                 NSApp.windows[0].makeKeyAndOrderFront(self)
             }
-            
+
         case "DeterminateOff:" :
             determinate = false
             ProgressBar.isIndeterminate = true
             ProgressBar.stopAnimation(nil)
-            
+
         case "DeterminateOffReset:" :
             determinate = false
             currentItem = 0
             ProgressBar.increment(by: -1000)
             ProgressBar.isIndeterminate = true
             ProgressBar.stopAnimation(nil)
-            
+
         case "Help:" :
             helpButton.isHidden = false
             helpURL = command.replacingOccurrences(of: "Help: ", with: "")
-            
+
         case "Image:" :
             logo = NSImage.init(byReferencingFile: command.replacingOccurrences(of: "Image: ", with: ""))
-            
+
             logoView.image = logo
             logoView.imageScaling = .scaleProportionallyUpOrDown
             logoView.imageAlignment = .alignCenter
             //LogoCell.image = logo
             //LogoCell.imageScaling = .scaleProportionallyUpOrDown
             //LogoCell.imageAlignment = .alignCenter
-            
+
         case "KillCommandFile:" :
             killCommandFile = true
-            
+
         case "Logout:":
             alertMessage = command //.replacingOccurrences(of: "Logout: ", with: "")
             contentToPass = alertMessage
-            self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
-            
-       // case "Logout:" :
-         //   let alertController = NSAlert()
-           // alertController.messageText = command.replacingOccurrences(of: "Logout: ", with: "")
-            //alertController.addButton(withTitle: "Logout")
-            //alertController.addButton(withTitle: "Quit")
-            //alertController.beginSheetModal(for: NSApp.windows[0]) { response in
-              //  self.quitSession()
-               // NSApp.terminate(self)
-            //}
+            self.performSegue(withIdentifier: "alertSegue", sender: self)
 
-            
         case "LogoutNow:":
             self.quitSession()
-            
+
         case "MainText:":
             MainText.isHidden = false
             MainTitle.isHidden = false
@@ -402,56 +393,56 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             // Need to do two replacingOccurrences since we are replacing with different values
             let newlinecommand = command.replacingOccurrences(of: "\\n", with: "\n")
             MainText.stringValue = newlinecommand.replacingOccurrences(of: "MainText: ", with: "")
-            
+
             // Unload Subviews
             wkWebView.stopLoading(myRequest)
             wkWebView.removeFromSuperview()
             self.myVideoPlayerView.player?.pause()
             myVideoPlayerView.removeFromSuperview()
-            
-            
-            
+
+
+
             // Remove the image if there is one
             ImageCell.image = nil
             //ImageCell.image = NSImage.init(byReferencingFile: "")
-            
+
         case "MainTextImage:" :
             maintextImage = NSImage.init(byReferencingFile: command.replacingOccurrences(of: "MainTextImage: ", with: ""))
-            
+
             ImageView.image = maintextImage
             ImageView.imageScaling = .scaleProportionallyUpOrDown
             ImageView.imageAlignment = .alignCenter
-            
+
             // Unload Subviews
             wkWebView.stopLoading(myRequest)
             wkWebView.removeFromSuperview()
             self.myVideoPlayerView.player?.pause()
             myVideoPlayerView.removeFromSuperview()
-            
+
             MainText.isHidden = true
             //MainTitle.isHidden = true
             //logoView.isHidden = true
-            
+
         case "MainTitle:" :
             // Need to do two replacingOccurrences since we are replacing with different values
             let newlinecommand = command.replacingOccurrences(of: "\\n", with: "\n")
             MainTitle.stringValue = newlinecommand.replacingOccurrences(of: "MainTitle: ", with: "")
             ImageCell.image = NSImage.init(byReferencingFile: "")
-            
+
             // Unload Web subview
             wkWebView.stopLoading(myRequest)
             wkWebView.removeFromSuperview()
             self.myVideoPlayerView.player?.pause()
             myVideoPlayerView.removeFromSuperview()
-            
+
         case "Notification:" :
             sendNotification(text: command.replacingOccurrences(of: "Notification: ", with: ""))
-            
+
         case "NotificationImage:" :
             notificationImage = NSImage.init(byReferencingFile: command.replacingOccurrences(of: "NotificationImage: ", with: ""))
         case "NotificationOn:" :
             notify = true
-            
+
         case "WindowStyle:" :
             switch command.replacingOccurrences(of: "WindowStyle: ", with: "") {
             case "Activate" :
@@ -475,41 +466,40 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             default :
                 break
             }
-            
+
         case "WindowTitle:" :
             let title = command.replacingOccurrences(of: "WindowTitle: ", with: "")
             NSApp.windows[0].title = title
-            
+
         case "Quit" :
             NSApp.terminate(self)
-            
+
         case "Quit:" :
             alertMessage = command //.replacingOccurrences(of: "Quit: ", with: "")
             contentToPass = alertMessage
-            self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
+            self.performSegue(withIdentifier: "alertSegue", sender: self)
 
-        
+
         case "QuitKey:" :
             let quitKeyTemp = command.replacingOccurrences(of: "QuitKey: ", with: "")
-            
+
             if quitKeyTemp.count == 1 {
-                
+
                 // exclude "q" as that's the system logout chord
-                
+
                 if quitKeyTemp != "q" {
                     quitKey = quitKeyTemp
                 }
             }
-            
+
         case "Restart:" :
             alertMessage = command //.replacingOccurrences(of: "Logout: ", with: "")
             contentToPass = alertMessage
             self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
 
-            
         case "RestartNow:" :
             self.reboot()
-            
+
         default:
             break
         }
@@ -520,14 +510,14 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
         var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
         var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
-        
+
         _ = AECreateDesc(
             UInt32(typeProcessSerialNumber),
             &psn,
             MemoryLayout<ProcessSerialNumber>.size,
             &targetDesc
         )
-        
+
         _ = AECreateAppleEvent(
             UInt32(kCoreEventClass),
             kAEReallyLogOut,
@@ -536,20 +526,20 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             AETransactionID(kAnyTransactionID),
             &eventToSend
         )
-        
+
         AEDisposeDesc(&targetDesc)
-        
+
         _ = AESendMessage(
             &eventToSend,
             &eventReply,
             AESendMode(kAENormalPriority),
             kAEDefaultTimeout
         )
-        
+
         if killCommandFile {
             tracker.killCommandFile()
         }
-        
+
     }
 
     func reboot() {
@@ -557,14 +547,14 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         var psn = ProcessSerialNumber(highLongOfPSN: UInt32(0), lowLongOfPSN: UInt32(kSystemProcess))
         var eventReply: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
         var eventToSend: AppleEvent = AppleEvent(descriptorType: UInt32(typeNull), dataHandle: nil)
-        
+
         _ = AECreateDesc(
             UInt32(typeProcessSerialNumber),
             &psn,
             MemoryLayout<ProcessSerialNumber>.size,
             &targetDesc
         )
-        
+
         _ = AECreateAppleEvent(
             UInt32(kCoreEventClass),
             kAERestart,
@@ -573,16 +563,16 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
             AETransactionID(kAnyTransactionID),
             &eventToSend
         )
-        
+
         AEDisposeDesc(&targetDesc)
-        
+
         _ = AESendMessage(
             &eventToSend,
             &eventReply,
             AESendMode(kAENormalPriority),
             kAEDefaultTimeout
         )
-        
+
         if killCommandFile {
             tracker.killCommandFile()
         }
@@ -590,11 +580,11 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
 
     func sendNotification(text: String) {
         let notification = NSUserNotification()
-        
+
         if logo != nil {
             notification.contentImage = logo
         }
-        
+
         notification.title = "Setup notification"
         notification.informativeText = text
         notification.soundName = NSUserNotificationDefaultSoundName
@@ -618,13 +608,13 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         catch {
             NSLog("Error: No Plist File to Initialize")
             NSLog(plistPath)
-            
+
             }
         }
     }
-    
+
     //MARK: Notification actions
-    
+
     @objc func enableContinue() {
         //continueButton.isHighlighted = true
         continueButton.isEnabled = true
@@ -632,32 +622,32 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         continueButton.setNextState()
     }
 
-    
+
     @IBAction func HelpClick(_ sender: Any) {
         // HelpClick will not display a pop up window customized
         // via DEPNotify preferences file
         //NSWorkspace.shared.open(URL(string: helpURL)!) //Uncomment this line to call help URL
     }
 
-    
+
     // Continue Button Actions
-    
+
     @IBAction func continueButton(_ sender: NSButton) {
-        
+
         let conditional = buttonAction // Set a conditional based on the continue button action sent by the user
         print ("Conditonal: \(conditional)")
         continueButton.isHidden = true // Hide Continue Button
-        
+
         // Start switch matching to display the correct window
         switch conditional {
         case "Register" :
-                let storyBoard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)  as NSStoryboard
-                let myViewController = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "RegistrationViewController")) as! NSViewController
-                self.presentViewControllerAsSheet(myViewController)
+                let storyBoard = NSStoryboard(name: "Main", bundle: nil)  as NSStoryboard
+                let myViewController = storyBoard.instantiateController(withIdentifier: "RegistrationViewController") as! NSViewController
+                self.presentAsSheet(myViewController)
         case "EULA" :
-                let storyBoard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)  as NSStoryboard
-                let myViewController = storyBoard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "EULAViewController")) as! NSViewController
-                self.presentViewControllerAsSheet(myViewController)
+                let storyBoard = NSStoryboard(name: "Main", bundle: nil)  as NSStoryboard
+                let myViewController = storyBoard.instantiateController(withIdentifier: "EULAViewController") as! NSViewController
+                self.presentAsSheet(myViewController)
         case "Restart" :
                 let bomFile = "/var/tmp/com.depnotify.provisioning.restart"
                 FileManager.default.createFile(atPath: bomFile, contents: nil, attributes: nil)
@@ -676,11 +666,11 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
                 NSApp.terminate(self)
         }
     }
-    
+
     // Key pressing
-    
+
     override func keyDown(with event: NSEvent) {
-        
+
         switch event.modifierFlags.intersection(NSEvent.ModifierFlags.deviceIndependentFlagsMask) {
         case [NSEvent.ModifierFlags.command, NSEvent.ModifierFlags.control] where event.charactersIgnoringModifiers == quitKey:
             NSApp.terminate(self)
@@ -691,7 +681,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
 
     // Function to pass data to Alert View Controller
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if (segue.identifier!.rawValue == "alertSegue") {
+        if (segue.identifier! == "alertSegue") {
             if let myViewController = segue.destinationController as? AlertViewController {
                 let datatoPass = contentToPass
                 myViewController.messagePass = datatoPass
@@ -701,20 +691,22 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
 }
 
 class WindowController: NSWindowController {
-    
+
     override func windowDidLoad() {
-        
+
         if CommandLine.arguments.contains("-fullScreen") {
-            
+
             NSApp.activate(ignoringOtherApps: true)
             self.window?.makeKeyAndOrderFront(self)
             self.window?.center()
             self.window?.isMovable = false
-            
-            background = storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Background")) as? Background
+
+            background = storyboard?.instantiateController(withIdentifier: "Background") as? Background
             background?.showWindow(self)
             background?.sendBack()
             NSApp.windows[0].level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.maximumWindow)))
+        } else {
+            self.window?.center()
         }
     }
 
