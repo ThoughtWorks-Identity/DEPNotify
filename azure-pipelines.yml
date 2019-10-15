@@ -23,8 +23,10 @@ steps:
       args: '-target DEPNotify'
    
 
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'DEPNotify.app'
-      targetPath: 'build/Release/DEPNotify.app'
 
+  
+  - task: PublishPipelineArtifact@0
+    displayName: 'Publish DEP_NOTIFY_APP'
+    inputs:
+      artifactName: DEP_NOTIFY_APP
+      targetPath: '$(Agent.BuildDirectory)/s/DEPNotify'
