@@ -495,7 +495,7 @@ class ViewController: NSViewController, WKNavigationDelegate, NSApplicationDeleg
         case "Restart:" :
             alertMessage = command //.replacingOccurrences(of: "Logout: ", with: "")
             contentToPass = alertMessage
-            self.performSegue(withIdentifier: NSStoryboard.SegueIdentifier(rawValue: "alertSegue"), sender: self)
+            self.performSegue(withIdentifier: "alertSegue", sender: self)
 
         case "RestartNow:" :
             self.reboot()
