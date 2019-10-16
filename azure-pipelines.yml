@@ -22,7 +22,12 @@ steps:
       sdk: 'macosx10.14'
       args: '-target DEPNotify'
 
-   
+    - task: CmdLine@2
+      inputs:
+      script: |
+        zip -r $(Agent.BuildDirectory)/s/DEPNotify.zip $(Agent.BuildDirectory)/s/build/Release/
+      
+        echo Hello world
 
 
   
@@ -30,4 +35,4 @@ steps:
     displayName: 'Publish DEP_NOTIFY_APP'
     inputs:
       artifactName: DEP_NOTIFY_APP
-      targetPath: '$(Agent.BuildDirectory)/s/build'
+      targetPath: '$(Agent.BuildDirectory)/s/DEPNotify.zip'
