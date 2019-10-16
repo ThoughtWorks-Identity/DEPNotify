@@ -19,8 +19,10 @@ steps:
       xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
+      signingOption: 'default'
       sdk: 'macosx10.14'
       args: '-target DEPNotify'
+
 
   - task: CmdLine@2
     displayName: 'create an archive'
