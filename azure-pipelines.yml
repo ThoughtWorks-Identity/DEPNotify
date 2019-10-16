@@ -25,11 +25,10 @@ steps:
   - task: CmdLine@2
     displayName: 'create an archive'
     inputs:
-    script: |
-      zip -r $(Agent.BuildDirectory)/s/DEPNotify.zip $(Agent.BuildDirectory)/s/build/Release/
-  
+      script: |
+        zip -r $(Agent.BuildDirectory)/s/DEPNotify.zip $(Agent.BuildDirectory)/s/build/Release/
 
-  
+    
   - task: PublishPipelineArtifact@0
     displayName: 'Publish DEP_NOTIFY_APP'
     inputs:
