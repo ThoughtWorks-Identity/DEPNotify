@@ -7,11 +7,11 @@ queue:
     - sh
 
 steps:
-  - task: InstallAppleCertificate@2
-    displayName: 'Install an Apple certificate'
-    inputs:
-      certSecureFile: 'mac_distribution_signing_key.p12'
-      certPwd: '$(mac_distribution_signing_password)'
+#  - task: InstallAppleCertificate@2
+#    displayName: 'Install an Apple certificate'
+#    inputs:
+#      certSecureFile: 'mac_distribution_signing_key.p12'
+#      certPwd: '$(mac_distribution_signing_password)'
 
   - task: Xcode@5
     displayName: 'Build DEP Notify'
@@ -19,7 +19,6 @@ steps:
       xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
-      signingOption: 'default'
       sdk: 'macosx10.14'
       args: '-target DEPNotify'
 
