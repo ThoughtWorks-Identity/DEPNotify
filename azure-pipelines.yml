@@ -21,8 +21,15 @@ steps:
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       sdk: 'macosx10.14'
       args: '-target DEPNotify'
+    disabled: true
    
-
+  - task: Xcode@5
+    inputs:
+      actions: 'build'
+      packageApp: false
+      signingOption: 'default'
+      destinationPlatformOption: 'macOS'
+      args: '-target DEPNotify'
 
   
   - task: PublishPipelineArtifact@0
