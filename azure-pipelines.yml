@@ -13,15 +13,15 @@ steps:
       certSecureFile: 'mac_distribution_signing_key.p12'
       certPwd: '$(mac_distribution_signing_password)'
 
-  - task: Xcode@5
-    displayName: 'Build DEP Notify'
-    inputs:
-      xcodeVersion: '10'
-      actions: 'build'
-      xcWorkspacePath: 'DEPNotify.xcodeproj'
-      sdk: 'macosx10.14'
-      args: '-target DEPNotify'
-    disabled: true
+#  - task: Xcode@5
+#    displayName: 'Build DEP Notify'
+#    inputs:
+#      xcodeVersion: '10'
+#      xcWorkspacePath: 'DEPNotify.xcodeproj'
+#      actions: 'build'
+#      sdk: 'macosx10.14'
+#      args: '-target DEPNotify'
+
    
   - task: Xcode@5
     inputs:
