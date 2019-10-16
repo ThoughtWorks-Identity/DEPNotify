@@ -36,4 +36,4 @@ steps:
     displayName: 'Publish DEP_NOTIFY_APP'
     inputs:
       artifactName: DEP_NOTIFY_APP
-      targetPath: '$(Agent.BuildDirectory)/s/DEPNotify.zip'
+      targetPath: '$(Agent.BuildDirectory)/s/build/DEPNotify.zip'
