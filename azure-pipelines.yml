@@ -29,7 +29,7 @@ steps:
       packageApp: false
       signingOption: 'default'
       destinationPlatformOption: 'macOS'
-      args: '-target DEPNotify'
+
 
   
   - task: PublishPipelineArtifact@0
