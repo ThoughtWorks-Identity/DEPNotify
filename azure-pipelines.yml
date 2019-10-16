@@ -7,11 +7,12 @@ queue:
     - sh
 
 steps:
-#  - task: InstallAppleCertificate@2
-#    displayName: 'Install an Apple certificate'
-#    inputs:
-#      certSecureFile: 'mac_distribution_signing_key.p12'
-#      certPwd: '$(mac_distribution_signing_password)'
+  - task: InstallAppleCertificate@2
+    displayName: 'Install an Apple certificate'
+    inputs:
+      certSecureFile: 'mac_distribution_signing_key.p12'
+      certPwd: '$(mac_distribution_signing_password)'
+    enabled: false
 
   - task: Xcode@5
     displayName: 'Build DEP Notify'
@@ -27,7 +28,8 @@ steps:
     displayName: 'create an archive'
     inputs:
       script: |
-        zip -r $(Agent.BuildDirectory)/s/DEPNotify.zip $(Agent.BuildDirectory)/s/build/Release/
+        cd $(Agent.BuildDirectory)/s/build/
+        zip -r DEPNotify.zip Release/
 
     
   - task: PublishPipelineArtifact@0
