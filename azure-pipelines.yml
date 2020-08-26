@@ -12,7 +12,6 @@ steps:
     inputs:
       certSecureFile: 'mac_distribution_signing_key.p12'
       certPwd: '$(mac_distribution_signing_password)'
-    enabled: false
 
   - task: Xcode@5
     displayName: 'Build DEP Notify'
