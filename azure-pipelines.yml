@@ -20,7 +20,6 @@ steps:
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
       signingOption: auto
-      teamId: V25DK7S622
       sdk: 'macosx10.14'
       args: '-target DEPNotify'
 
