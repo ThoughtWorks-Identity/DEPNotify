@@ -27,7 +27,7 @@ steps:
       actions: 'build'
       signingOption: auto
       sdk: 'macosx10.14'
-      args: '-target DEPNotify'
+      args: '-target DEPNotify --timestamp'
 
 
   - task: CmdLine@2
