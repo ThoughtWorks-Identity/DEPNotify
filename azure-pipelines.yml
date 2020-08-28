@@ -12,14 +12,20 @@ steps:
     inputs:
       certSecureFile: '$(Application_signing_certificate)'
       certPwd: '$(Application_signing_certificate_password)'
+      
 
+  - task: CmdLine@2
+    displayName: Check for signing identities
+    inputs:
+      script: 'security find-identity -v -p codesigning'
+      
   - task: Xcode@5
     displayName: 'Build DEP Notify'
     inputs:
       xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
-      signingOption: manual
+      signingOption: 'manual'
       signingIdentity: 'ThoughtWorks Deutschland GmbH (V25DK7S622)'
       sdk: 'macosx10.14'
       args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
