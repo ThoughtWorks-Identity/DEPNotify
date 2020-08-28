@@ -8,16 +8,10 @@ queue:
 
 steps:
   - task: InstallAppleCertificate@2
-    displayName: 'Install an Apple certificate'
+    displayName: 'Install an Apple application signing certificate'
     inputs:
-      certSecureFile: 'mac_distribution_signing_key.p12'
-      certPwd: '$(mac_distribution_signing_password)'
-
-  - task: InstallAppleCertificate@2
-    displayName: 'Install a second test Apple certificate'
-    inputs:
-      certSecureFile: '$(Test_Certificate)'
-      certPwd: '$(test_cert_password)'
+      certSecureFile: '$(Application_signing_certificate)'
+      certPwd: '$(Application_signing_certificate_password)'
 
   - task: Xcode@5
     displayName: 'Build DEP Notify'
@@ -31,7 +25,7 @@ steps:
   
 
   - task: CmdLine@2
-    displayName: 'create an archive'
+    displayName: 'create an archive of DEPNotify.app'
     inputs:
       script: |
         cd $(Agent.BuildDirectory)/s/build/
