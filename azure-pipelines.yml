@@ -8,11 +8,10 @@ queue:
 
 steps:
   - task: InstallAppleCertificate@2
-    displayName: 'Install an Apple certificate'
+    displayName: 'Install an Apple application signing certificate'
     inputs:
-      certSecureFile: 'mac_distribution_signing_key.p12'
-      certPwd: '$(mac_distribution_signing_password)'
-    enabled: false
+      certSecureFile: '$(Application_signing_certificate)'
+      certPwd: '$(Application_signing_certificate_password)'
 
   - task: Xcode@5
     displayName: 'Build DEP Notify'
@@ -20,14 +19,13 @@ steps:
       xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
-      signingOption: manual
-      teamId: V25DK7S622
+      signingOption: auto
       sdk: 'macosx10.14'
-      args: '-target DEPNotify'
-
+      args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
+  
 
   - task: CmdLine@2
-    displayName: 'create an archive'
+    displayName: 'create an archive of DEPNotify.app'
     inputs:
       script: |
         cd $(Agent.BuildDirectory)/s/build/
