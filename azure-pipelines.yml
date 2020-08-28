@@ -26,7 +26,7 @@ steps:
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
       signingOption: 'manual'
-      signingIdentity: 'ThoughtWorks Deutschland GmbH (V25DK7S622)'
+      signingIdentity: 'Developer ID Application: ThoughtWorks Deutschland GmbH (V25DK7S622)'
       sdk: 'macosx10.14'
       args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
   
