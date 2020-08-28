@@ -19,7 +19,8 @@ steps:
       xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
-      signingOption: auto
+      signingOption: manual
+      signingIdentity: 'V25DK7S622'
       sdk: 'macosx10.14'
       args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
   
