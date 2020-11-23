@@ -2,7 +2,7 @@ resources:
   - repo: self
 pool:
   name: Azure Pipelines
-  vmIimage: macOS-10.15
+  vmImage: macOS-10.15
 
 steps:
   - task: InstallAppleCertificate@2
