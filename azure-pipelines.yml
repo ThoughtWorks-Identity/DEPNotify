@@ -1,7 +1,7 @@
 resources:
   - repo: self
 queue:
-  name: macOS-10.15
+  name: macOS-latest
   demands:
     - xcode
     - sh
