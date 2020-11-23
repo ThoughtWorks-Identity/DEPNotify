@@ -22,7 +22,7 @@ steps:
   - task: CmdLine@2
     displayName: Set Xcode Version
     inputs:
-      script: 'cd /Applications %% ls -al'
+      script: 'cd /Applications && ls -al'
 
       
   - task: Xcode@5
