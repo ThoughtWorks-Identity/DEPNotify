@@ -18,6 +18,12 @@ steps:
     displayName: Check for signing identities
     inputs:
       script: 'security find-identity -v -p codesigning'
+    
+  - task: CmdLine@2
+    displayName: Set Xcode Version
+    inputs:
+      script: 'xcode-select -s /Applications/Xcode_12.2.app'
+
       
   - task: Xcode@5
     displayName: 'Build DEP Notify'
