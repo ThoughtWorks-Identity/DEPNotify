@@ -17,11 +17,6 @@ steps:
     inputs:
       script: 'security find-identity -v -p codesigning'
     
-  - task: CmdLine@2
-    displayName: Set Xcode Version
-    inputs:
-      script: 'cd /Applications && ls -al'
-
       
   - task: Xcode@5
     displayName: 'Build DEP Notify'
