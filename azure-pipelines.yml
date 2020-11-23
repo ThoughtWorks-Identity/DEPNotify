@@ -1,7 +1,8 @@
 resources:
   - repo: self
 queue:
-  name: hosted macOS
+  name: Azure Pipelines
+  Image: macOS-10.15
   demands:
     - xcode
     - sh
