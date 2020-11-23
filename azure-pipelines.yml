@@ -22,7 +22,7 @@ steps:
   - task: Xcode@5
     displayName: 'Build DEP Notify'
     inputs:
-      xcodeVersion: 'Default'
+      xcodeVersion: '10'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
       signingOption: 'manual'
