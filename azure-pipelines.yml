@@ -22,7 +22,8 @@ steps:
   - task: Xcode@5
     displayName: 'Build DEP Notify'
     inputs:
-      xcodeVersion: '10'
+      xcodeVersion: 'specifyPath'
+      xcodeDeveloperDir: '/Applications/Xcode_12.app'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
       signingOption: 'manual'
@@ -30,7 +31,6 @@ steps:
       sdk: 'macOS 11.0'
       args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
   
-
   - task: CmdLine@2
     displayName: 'create an archive of DEPNotify.app'
     inputs:
