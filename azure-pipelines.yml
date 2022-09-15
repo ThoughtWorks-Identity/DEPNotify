@@ -22,7 +22,7 @@ steps:
     displayName: 'Build DEP Notify'
     inputs:
       xcodeVersion: 'specifyPath'
-      xcodeDeveloperDir: '/Applications/Xcode_12.2.app'
+      xcodeDeveloperDir: '/Applications/Xcode_12.4.app'
       xcWorkspacePath: 'DEPNotify.xcodeproj'
       actions: 'build'
       signingOption: 'manual'
