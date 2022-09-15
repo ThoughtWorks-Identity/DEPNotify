@@ -27,7 +27,7 @@ steps:
       actions: 'build'
       signingOption: 'manual'
       signingIdentity: 'Developer ID Application: ThoughtWorks Deutschland GmbH (V25DK7S622)'
-      sdk: 'macOS 11.0'
+      sdk: 'macOS 11.3'
       args: '-target DEPNotify OTHER_CODE_SIGN_FLAGS="--timestamp" CODE_SIGN_INJECT_BASE_ENTITLEMENTS="NO"'
   
   - task: CmdLine@2
